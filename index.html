@@ -3,64 +3,595 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundial do Corinthians</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TennisTech</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        .carousel-item { display: none; }
-        .carousel-item.active { display: block; }
-        .animate-slide-in { animation: slideIn 0.5s ease-in-out; }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(100px); }
-            to { opacity: 1; transform: translateX(0); }
+        :root {
+            --primary-color: #cc99ff;
+            --accent-color: #ff66ff;
+            --shadow-color: #b266ff;
+            --text-color: #ffffff;
+            --background-color: #000000;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 25px rgba(178, 102, 255, 0.7);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .navbar a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0 15px;
+            position: relative;
+            transition: color var(--transition-speed), transform var(--transition-speed);
+        }
+
+        .navbar a:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+            text-shadow: 0 0 15px var(--accent-color);
+        }
+
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--text-color);
+            transition: width var(--transition-speed);
+        }
+
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--text-color);
+            text-shadow: 0 0 20px var(--accent-color), 0 0 40px var(--shadow-color);
+            animation: neonGlow 1s ease-in-out infinite alternate;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .cta-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: none;
+            border: 2px solid var(--text-color);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-color);
+            color: var(--background-color);
+            box-shadow: 0 0 25px var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 102, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--shadow-color), 0 0 30px var(--primary-color); }
+            to { text-shadow: 0 0 20px var(--accent-color), 0 0 40px var(--shadow-color), 0 0 50px var(--primary-color); }
+        }
+
+        section {
+            padding: 80px 50px;
+            text-align: center;
+        }
+
+        section h2 {
+            font-size: 2.5em;
+            color: var(--text-color);
+            text-shadow: 0 0 15px var(--shadow-color);
+            margin-bottom: 20px;
+        }
+
+        section p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            color: var(--primary-color);
+        }
+
+        .carousel {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+            overflow: hidden;
+            border: 2px solid var(--text-color);
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--shadow-color);
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .carousel-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform var(--transition-speed);
+            border: 1px solid var(--primary-color);
+        }
+
+        .carousel-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .carousel-prev, .carousel-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--text-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 2;
+            transition: background var(--transition-speed);
+        }
+
+        .carousel-prev:hover, .carousel-next:hover {
+            background: var(--accent-color);
+            color: var(--background-color);
+        }
+
+        .carousel-prev {
+            left: 10px;
+        }
+
+        .carousel-next {
+            right: 10px;
+        }
+
+        .highlights {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .highlight-card {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            width: 300px;
+            border: 2px solid var(--text-color);
+            border-radius: 10px;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 0 30px var(--accent-color);
+        }
+
+        .highlight-card h3 {
+            color: var(--text-color);
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .highlight-card p {
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+
+        .quiz-section {
+            max-width: 600px;
+            margin: 40px auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border: 2px solid var(--text-color);
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--shadow-color);
+        }
+
+        .quiz-question {
+            font-size: 1.2em;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 10px;
+            background: none;
+            border: 2px solid var(--text-color);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .quiz-option:hover {
+            background: var(--accent-color);
+            color: var(--background-color);
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: var(--text-color);
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            width: 250px;
+            border: 2px solid var(--text-color);
+            border-radius: 10px;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 0 30px var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .card h3 {
+            color: var(--text-color);
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .card p {
+            color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--text-color);
+        }
+
+        footer a {
+            color: var(--primary-color);
+            margin: 0 10px;
+            font-size: 1.5em;
+            transition: color var(--transition-speed), transform var(--transition-speed);
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+            transform: scale(1.2);
+            text-shadow: 0 0 15px var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5em; }
+            .navbar { flex-direction: column; gap: 10px; padding: 10px; }
+            .navbar a { margin: 5px 0; }
+            .highlights { flex-direction: column; align-items: center; }
+            .carousel { max-width: 90%; }
+            .highlight-card, .card { width: 100%; max-width: 300px; }
         }
     </style>
 </head>
-<body class="bg-black text-white font-sans">
-    <header class="bg-white text-black py-6 flex items-center justify-center space-x-4">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/9/90/Sport_Club_Corinthians_Paulista_logo.svg" alt="Logo Corinthians" class="w-20">
-        <h1 class="text-4xl font-bold">Mundial do Corinthians</h1>
-    </header>
-    <main class="max-w-4xl mx-auto my-8 p-6 bg-gray-900 rounded-lg shadow-lg">
-        <section class="carousel">
-            <div class="carousel-item active animate-slide-in" id="mundial-2000" role="tabpanel" aria-labelledby="tab-2000">
-                <h2 class="text-3xl font-bold mb-4">Mundial de 2000</h2>
-                <p class="mb-4">Em 2000, o Corinthians conquistou o primeiro Mundial de Clubes da FIFA, no Brasil. Liderado por Marcelinho Carioca, Edílson e Rincón, o Timão venceu o Vasco por 4x3 nos pênaltis, após um empate sem gols no Maracanã. Foi o primeiro título mundial de um clube brasileiro no formato moderno, marcando a história do futebol.</p>
-                <img src="https://www.corinthians.com.br/files/cache/5f2d1b3c6b6b3b6b6b6b6b6b6b6b6b6b/2000-mundial.jpg" alt="Mundial 2000" class="w-full h-auto rounded-lg border-2 border-white mb-4">
+<body>
+    <nav class="navbar" aria-label="Navegação principal">
+        <a href="#home" class="logo" aria-label="TennisTech Home">TennisTech</a>
+        <div role="navigation">
+            <a href="#home" aria-label="Ir para a página inicial">Home</a>
+            <a href="#about" aria-label="Ir para a seção Sobre">Sobre</a>
+            <a href="#highlights" aria-label="Ir para a seção Destaques">Destaques</a>
+            <a href="#tennis" aria-label="Ir para a seção Coleção">Coleção</a>
+            <a href="#quiz" aria-label="Ir para a seção Quiz">Quiz</a>
+            <a href="#contact" aria-label="Ir para a seção Contato">Contato</a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="background-animation">
+            <canvas id="particleCanvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="hero-content">
+            <h1>Paixão pelo Tênis</h1>
+            <p>Explore o universo do tênis com um toque futurista e vibes cyberpunk!</p>
+            <button class="cta-button" aria-label="Ver coleção de tênis">Ver Coleção</button>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>Sobre o TennisTech</h2>
+        <p>Somos uma marca inovadora dedicada a tênis que combinam tecnologia de ponta com designs radicais. Perfeito para jovens que amam estilo, performance e um toque de rebeldia cyber!</p>
+    </section>
+
+    <section id="highlights">
+        <h2>Inspiração TennisTech</h2>
+        <p>Deixe-se levar pela energia do tênis com nosso lema e poesia que capturam a essência do jogo!</p>
+        <div class="highlights">
+            <div class="highlight-card">
+                <h3>Lema: Força no Saque</h3>
+                <p>Domine a quadra com paixão, estilo e coragem!</p>
             </div>
-            <div class="carousel-item" id="mundial-2012" role="tabpanel" aria-labelledby="tab-2012">
-                <h2 class="text-3xl font-bold mb-4">Mundial de 2012</h2>
-                <p class="mb-4">Em 2012, no Japão, o Corinthians voltou a ser campeão mundial. Sob o comando de Tite, o Timão derrotou o Chelsea por 1x0, com gol de Paolo Guerrero e atuações memoráveis de Cássio. A conquista consagrou a força da equipe e a paixão da Fiel Torcida, que invadiu Yokohama.</p>
-                <img src="https://www.corinthians.com.br/files/cache/5f2d1b3c6b6b3b6b6b6b6b6b6b6b6b6b/2012-mundial.jpg" alt="Mundial 2012" class="w-full h-auto rounded-lg border-2 border-white mb-4">
+            <div class="highlight-card">
+                <h3>Poema: O Ritmo Neon</h3>
+                <p>
+                    Sob luzes neon, a bola dança,<br>
+                    No asfalto brilha nossa esperança.<br>
+                    Com tênis pulsando, o futuro é nosso,<br>
+                    TennisTech, onde o jogo é imenso!
+                </p>
             </div>
-            <div class="flex justify-center space-x-4 mt-4">
-                <button onclick="showSlide('mundial-2000')" class="bg-white text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition" aria-label="Mostrar Mundial de 2000" id="tab-2000">2000</button>
-                <button onclick="showSlide('mundial-2012')" class="bg-white text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition" aria-label="Mostrar Mundial de 2012" id="tab-2012">2012</button>
+            <div class="highlight-card">
+                <h3>Lema: Jogue Sem Limites</h3>
+                <p>Quebre as barreiras com cada passo na quadra!</p>
             </div>
-        </section>
-        <section class="mt-8">
-            <h2 class="text-3xl font-bold mb-4">Cânticos da Fiel</h2>
-            <p class="mb-4">A torcida do Corinthians é conhecida por sua paixão. Um dos cânticos mais famosos é:</p>
-            <blockquote class="italic border-l-4 border-white pl-4">
-                "Vai, Corinthians! <br> O mundo é nosso, <br> Com a Fiel, ninguém nos para!"
-            </blockquote>
-            <button onclick="playChant()" class="bg-white text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition mt-4" aria-label="Tocar cântico da torcida">Tocar Cântico</button>
-        </section>
-    </main>
-    <footer class="bg-white text-black py-4 text-center">
-        <p>&copy; 2025 - Mundial do Corinthians - Feito para a Fiel Torcida</p>
+        </div>
+    </section>
+
+    <section id="tennis">
+        <h2>Coleção de Tênis</h2>
+        <p>Descubra nossos modelos exclusivos com designs que brilham no escuro e tecnologia anti-impacto!</p>
+        <div class="carousel" role="region" aria-label="Carrossel de tênis">
+            <button class="carousel-prev" aria-label="Item anterior do carrossel">&#10094;</button>
+            <div class="carousel-inner">
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/800x400/ff66ff/000000?text=T%C3%AAnis+Neon+Strike" alt="Tênis Neon Strike">
+                    <h3>Tênis Neon Strike</h3>
+                    <p>Amortecimento avançado para quadras rápidas. Preço: R$299</p>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/800x400/cc99ff/000000?text=T%C3%AAnis+Purple+Pulse" alt="Tênis Purple Pulse">
+                    <h3>Tênis Purple Pulse</h3>
+                    <p>Suporte para longas partidas. Preço: R$349</p>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/800x400/b266ff/000000?text=T%C3%AAnis+Dark+Ace" alt="Tênis Dark Ace">
+                    <h3>Tênis Dark Ace</h3>
+                    <p>Durabilidade para alto desempenho. Preço: R$279</p>
+                </div>
+            </div>
+            <button class="carousel-next" aria-label="Próximo item do carrossel">&#10095;</button>
+        </div>
+        <div class="card-container">
+            <div class="card">
+                <h3>Customização</h3>
+                <p>Personalize seu tênis com cores neon e adesivos cyber!</p>
+            </div>
+            <div class="card">
+                <h3>Promoções</h3>
+                <p>Descontos exclusivos para seguidores nas redes!</p>
+            </div>
+            <div class="card">
+                <h3>Eventos</h3>
+                <p>Participe de torneios virtuais e meetups!</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="quiz">
+        <h2>Quiz: Qual Tênis é Perfeito para Você?</h2>
+        <p>Teste seu estilo e descubra o modelo ideal!</p>
+        <div class="quiz-section" role="region" aria-label="Quiz interativo">
+            <div class="quiz-question">Qual é o seu estilo de jogo?</div>
+            <div class="quiz-options">
+                <button class="quiz-option" data-model="Neon Strike">Agressivo e rápido</button>
+                <button class="quiz-option" data-model="Purple Pulse">Estratégico e resistente</button>
+                <button class="quiz-option" data-model="Dark Ace">Equilibrado e durável</button>
+            </div>
+            <div id="quiz-result" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Contato</h2>
+        <p>Quer saber mais? Envie um e-mail para: <a href="mailto:contato@tennistech.com" aria-label="Enviar e-mail para TennisTech">contato@tennistech.com</a> ou siga-nos nas redes!</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 TennisTech. Todos os direitos reservados.</p>
+        <div class="social-icons" role="navigation" aria-label="Links de redes sociais">
+            <a href="https://instagram.com" target="_blank" aria-label="Siga-nos no Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://tiktok.com" target="_blank" aria-label="Siga-nos no TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://youtube.com" target="_blank" aria-label="Siga-nos no YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://twitter.com" target="_blank" aria-label="Siga-nos no Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
     </footer>
+
     <script>
-        function showSlide(id) {
-            document.querySelectorAll('.carousel-item').forEach(item => {
-                item.classList.remove('active', 'animate-slide-in');
+        // Smooth scroll to section
+        document.querySelectorAll('.navbar a, .cta-button').forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = element.getAttribute('href')?.slice(1) || element.getAttribute('data-section');
+                if (sectionId) {
+                    document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+                }
             });
-            const activeSlide = document.getElementById(id);
-            activeSlide.classList.add('active', 'animate-slide-in');
+        });
+
+        // Particle animation for background
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = Math.min(100, window.innerWidth / 10); // Reduce particles on smaller screens
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = ['#cc99ff', '#ff66ff', '#b266ff'][Math.floor(Math.random() * 3)];
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.03;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
-        function playChant() {
-            alert("Vai, Corinthians! O mundo é nosso!");
-            // Para um áudio real, substitua por: new Audio('caminho/do/audio.mp3').play();
+
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
         }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].size <= 0.2) {
+                    particles.splice(i, 1);
+                    i--;
+                    particles.push(new Particle());
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Carousel functionality
+        let currentIndex = 0;
+        const items = document.querySelectorAll('.carousel-item');
+        const totalItems = items.length;
+
+        function moveCarousel(direction) {
+            currentIndex = (currentIndex + direction + totalItems) % totalItems;
+            document.querySelector('.carousel-inner').style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        document.querySelector('.carousel-prev').addEventListener('click', () => moveCarousel(-1));
+        document.querySelector('.carousel-next').addEventListener('click', () => moveCarousel(1));
+
+        // Quiz functionality
+        document.querySelectorAll('.quiz-option').forEach(button => {
+            button.addEventListener('click', () => {
+                const model = button.getAttribute('data-model');
+                document.getElementById('quiz-result').innerHTML = `Seu tênis ideal é o <strong>${model}</strong>! Corre pra coleção e garanta o seu! 🎾`;
+            });
+        });
     </script>
 </body>
 </html>
